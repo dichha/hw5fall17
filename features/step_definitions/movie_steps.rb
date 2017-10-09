@@ -42,12 +42,13 @@ Given /^I am on the RottenPotatoes home page$/ do
 # New step definitions to be completed for HW5. 
 # Note that you may need to add additional step definitions beyond these
 
-
+value = 0
 # Add a declarative step here for populating the DB with movies.
-
 Given /the following movies have been added to RottenPotatoes:/ do |movies_table|
-  pending  # Remove this statement when you finish implementing the test step
+  value = 0
   movies_table.hashes.each do |movie|
+    m = Movie.create!(movie)
+    value += 1
     # Each returned movie will be a hash representing one row of the movies_table
     # The keys will be the table headers and the values will be the row contents.
     # Entries can be directly to the database with ActiveRecord methods
@@ -59,16 +60,31 @@ When /^I have opted to see movies rated: "(.*?)"$/ do |arg1|
   # HINT: use String#split to split up the rating_list, then
   # iterate over the ratings and check/uncheck the ratings
   # using the appropriate Capybara command(s)
-  pending  #remove this statement after implementing the test step
+  arg1.split(',').each do |rating|
+    check("ratings["+rating.strip+"]")
+  end
+  
 end
 
 Then /^I should see only movies rated: "(.*?)"$/ do |arg1|
-  pending  #remove this statement after implementing the test step
+ arg1.split(',').each do |rating|
+    page.has_xpath?("//td[text()='#{rating}']")
+ end
+ 
 end
 
 Then /^I should see all of the movies$/ do
-  pending  #remove this statement after implementing the test step
+  page.should have_css("table#movies tbody tr", :count => value.to_i)
 end
+
+When /^I click "(.*?)"/ do |arg1|
+    click_link "#{arg1}"
+end
+
+Then /^I should see "(.*)" before "(.*)"/ do|arg1, arg2|
+    page.body =~ /#{arg1}.*#{arg2}/m
+end
+
 
 
 
