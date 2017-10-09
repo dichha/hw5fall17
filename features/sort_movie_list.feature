@@ -23,12 +23,13 @@ Background: movies have been added to database
 
 Scenario: sort movies alphabetically
   # your scenario here
-  
+  Given I am on the RottenPotatoes home page
   When I click "Movie Title"
   Then I should see "Alladin" before "Amelie"
   
 
 Scenario: sort movies in increasing order of release date
   # your scenario here
+  Given I am on the RottenPotatoes home page
   When I click "Release Date"
   Then I should see "Alladin" before "Amelie"
